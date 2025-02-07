@@ -1,10 +1,3 @@
-import { LiaUserSecretSolid } from "react-icons/lia";
-import { ImCompass2 } from "react-icons/im";
-import { FcIdea } from "react-icons/fc";
-import { MdOutlineSummarize } from "react-icons/md";
-import { FaCode } from "react-icons/fa6";
-import { IoImagesOutline } from "react-icons/io5";
-import { IoMicOutline } from "react-icons/io5";
 import { LuSendHorizontal } from "react-icons/lu";
 import { useContext } from "react";
 import { PrimeContext } from "../contexts/Context";
@@ -64,7 +57,12 @@ const Main = () => {
                 </div>
                 <div className="flex items-center justify-end mb-4">
                   <div className="bg-gray-700 text-white p-3 rounded-lg max-w-[80%]">
-                    <p>{resultData || "No result data available yet"}</p>
+                    <div
+                      className="text-white leading-relaxed"
+                      dangerouslySetInnerHTML={{
+                        __html: resultData || "No result data available yet",
+                      }}
+                    ></div>
                   </div>
                 </div>
               </div>

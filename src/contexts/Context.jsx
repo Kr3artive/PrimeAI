@@ -1,5 +1,6 @@
 import { useState, createContext } from "react";
 import run from "../config/Gemini";
+import { marked } from "marked";
 
 export const PrimeContext = createContext();
 
@@ -12,17 +13,17 @@ const PrimeContextProvider = ({ children }) => {
   const [resultData, setResultData] = useState("");
 
   const startNewChat = () => {
-    setPrevPrompts([]);  // Clear the history
-    setResultData("");   // Clear the current result
-    setInput("");        // Clear the input
+    setPrevPrompts([]); // Clear the history
+    setResultData(""); // Clear the current result
+    setInput(""); // Clear the input
   };
 
   const resetScreen = () => {
-    setPrevPrompts([]);  // Clear the prompt history
-    setResultData("");   // Clear the result data
-    setResults(false);   // Reset the result state
-    setInput("");        // Clear the input field
-    setLoading(false);   // Reset the loading state
+    setPrevPrompts([]); // Clear the prompt history
+    setResultData(""); // Clear the result data
+    setResults(false); // Reset the result state
+    setInput(""); // Clear the input field
+    setLoading(false); // Reset the loading state
   };
 
   const send = async () => {
@@ -44,7 +45,9 @@ const PrimeContextProvider = ({ children }) => {
         throw new Error("No response from Gemini");
       }
 
-      setResultData(response);
+      // Convert Markdown to HTML before setting resultData
+      const formattedResponse = marked(response);
+      setResultData(formattedResponse);
     } catch (error) {
       console.error("Error in send function:", error.message);
       setResultData("An error occurred while processing your request.");
@@ -71,7 +74,7 @@ const PrimeContextProvider = ({ children }) => {
         setResultData,
         send,
         startNewChat,
-        resetScreen 
+        resetScreen,
       }}
     >
       {children}

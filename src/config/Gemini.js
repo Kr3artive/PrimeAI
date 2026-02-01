@@ -1,31 +1,41 @@
-const { GoogleGenAI } = require("@google/genai");
+import { GoogleGenAI } from "@google/genai";
 
 const apiKey = "AIzaSyDFttgMb2_aFOX_iD0Yn62gtw9CDHO28Ds";
 
 const AI = new GoogleGenAI({
-  apiKey,
+  apiKey: apiKey,
 });
+
+const models = await AI.models.list()
+console.log("Available models:", models);
 
 const generationConfig = {
   temperature: 1,
   topP: 0.95,
   topK: 40,
   maxOutputTokens: 8192,
+  responseMimeType: "text/plain",
 };
 
 async function run(prompt) {
   try {
-    const response = await AI.generateText({
-      model: "gemini-2.0", // make sure this model exists
-      input: prompt,
-      ...generationConfig,
+    const response = await AI.models.generateContent({
+      model: "models/gemini-2.0-flash-lite",
+      contents: [
+        {
+          type: "text",
+          text: prompt,
+        },
+      ],
+      generationConfig,
     });
 
-    return response.output_text; // this is the text returned
+    // The response has candidates with `text`
+    return response.candidates.map((c) => c.text).join("\n");
   } catch (error) {
     console.error("Error in Gemini AI:", error);
-    return "Error while processing the request";
+    return "Error while generating content. You've exceeded your quota, Please retry in 36.857584285s";
   }
 }
 
-module.exports = run; // use module.exports if using Node.js
+export default run;

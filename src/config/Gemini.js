@@ -6,8 +6,6 @@ const AI = new GoogleGenAI({
   apiKey: apiKey,
 });
 
-const models = await AI.models.list()
-console.log("Available models:", models);
 
 const generationConfig = {
   temperature: 1,
